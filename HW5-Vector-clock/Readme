@@ -1,4 +1,18 @@
+TBD...
+
 Title: Design for Vector Clock Implementation
+
+1- Interactions
+
+2- What we need to store
+
+4- What needs to change
+
+5- What will be the input? [ The input will be different each time, user should have the ability to control input  and get different results ] 
+
+6- What will be the output?
+
+7- Decide which event happened Before, which event is concurrent.
 
 Classes:
 
