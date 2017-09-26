@@ -1,3 +1,51 @@
 Title: Design for Vector Clock Implementation
 
+Classes:
 
+1. Processor
+	Member variables and member function:
+	
+	-id 			: Integer		to uniquely identify processor
+	-messageBuffer 	: Buffer		
+	-vc				: VectorClock
+	
+	+sendMessgeToMyBuffer(Message message)
+	+update(Observable observable, Object arg)
+	+calculateVectorClocks(Observable observable, Object arg)
+	
+2. VectorClock
+	Member variables and member function:
+	
+	-vc				: Integer[]		to store array of vector clocks
+	
+	+compareTo(VectorClock o)
+	+updateAt(int index, int value)
+	
+3. Algorithm
+	Member variables and member function:
+	
+	-noOfProcessors	: Integer
+	-p				: Processor
+	
+	+executionPlanForP()
+	+compute(Processor p, Message computeMessage)
+	+send(Processor to, Message m)
+	
+4. MessageType <<enumeration>>
+	
+	COMPUTATION
+
+5. Message
+
+	-messageType	: MessageType
+	-vc				: VectorClock
+
+6. Buffer
+
+	-message		: Message
+	
+	+getMessage()
+	+setMessage(Message message)	
+	
+	
+	
