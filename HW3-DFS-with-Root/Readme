@@ -1,7 +1,28 @@
 Project Title: Java Implementation for DFS Spanning tree with specified root
 
+Instructions to clone the repository from Git Bash:
+
+$ git clone https://github.com/Mayuri-Wad-012447851/CS-249-Distributed-Computing
+Cloning into 'CS-249-Distributed-Computing'...
+remote: Counting objects: 36, done.
+remote: Compressing objects: 100% (32/32), done.
+remote: Total 36 (delta 4), reused 35 (delta 3), pack-reused 0
+Unpacking objects: 100% (36/36), done.
+
+Instructions to run the program from command prompt:
+
+1. In command prompt, change directory to location of file (cloning location). 
+2. To compile and run, issue following commands:
+
+Command 1: 
+$..\CS-249-Distributed-Computing\HW3-DFS-with-Root\src>"C:\Program Files\Java\jdk1.8.0_121\bin\javac" *.java
+
+Command 2:
+$..\CS-249-Distributed-Computing\HW3-DFS-with-Root\src>"C:\Program Files\Java\jdk1.8.0_121\bin\java" Main
+
 Description:
-This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. This is a java implementation of DFS spanning tree with specified root in the graph. There is a Buffer class that extends Java Observable, a Processor that implements Java Observer, and a Message enum class that contains the values {M, PARENT, ALREADY}.
+This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. 
+This is a java implementation of DFS spanning tree with specified root in the graph. There is a Buffer class that extends Java Observable, a Processor that implements Java Observer, and a Message enum class that contains the values {M, PARENT, ALREADY}.
 
 Overview:
 Main.java
@@ -11,10 +32,11 @@ Processor.java
 	This module implements Observer interface and thus provides implementation for update() method of observer. Update method decides processor's behavior after being notified by a change in observable buffer. Every processor calls an explore() method to discover children and to send <M> to all its neighbors. 
 
 Message.java
-It contains Message enum with values PARENT, ALREADY and M.
+	It contains Message enum with values PARENT, ALREADY and M.
 
 Buffer.java
-Buffer is an observable of a processor and it notifies its processor instance of any change in its state.
+	Buffer is an observable of a processor and it notifies its processor instance of any change in its state.
+
 Input:
 A graph in the form of adjacency list.
 Map <Processor, List<Processor> >
@@ -34,36 +56,46 @@ P5 --> [P2 P4 ]
 
 Output:
 User will be prompted to enter id for a processor, which will act as a root of spanning tree.
+
 Example 1 :
-Enter root node:	
+Enter a specific root node to start from (Values from 0-5):	
 5
----------Final Spanning Tree-------
 
-P0 --> [P1 P3 ]
-P1 --> [P4 ]
-P2 --> [P0 ]
-P3 --> []
-P4 --> []
-P5 --> [P2 ]
+Input Graph:
 
-Example 2:
-Enter root node:	
-2
----------Final Spanning Tree-------
+P0: [P1 P2 P3 ]
+P1: [P0 P2 P4 ]
+P2: [P0 P1 P5 ]
+P3: [P0 ]
+P4: [P1 P5 ]
+P5: [P5 P2 P4 ]
 
-P0 --> [P1 P3 ]
-P1 --> [P4 ]
-P2 --> [P0 ]
-P3 --> []
-P4 --> [P5 ]
-P5 --> []
 
-Example 3:
-Enter root node:	
-6
-Numbers between 0 to 5 are acceptible
+	<M> received at P5
+	<M> received at P2
+	<M> received at P0
+	<M> received at P1
+	<M> received at P2
+	<ALREADY> received at P1
+	<M> received at P4
+	<M> received at P5
+	<ALREADY> received at P4
+	<PARENT> received at P1
+	<PARENT> received at P0
+	<M> received at P3
+	<PARENT> received at P0
+	<PARENT> received at P2
+	<M> received at P1
+	<ALREADY> received at P2
+	<PARENT> received at P5
+	<M> received at P4
+	<ALREADY> received at P5
 
-Authors:
-Mayuri Wadkar
-Eric Han
-Sonali Mishra
+Final Spanning Tree:
+
+P0: [P1 P3 ]
+P1: [P4 ]
+P2: [P0 ]
+P3: []
+P4: []
+P5: [P2 ]

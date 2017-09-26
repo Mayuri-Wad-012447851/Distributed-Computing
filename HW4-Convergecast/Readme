@@ -1,25 +1,28 @@
 Project Title:  Java Implementation of the converge-cast algorithm as a recursion.
 
-Instructions to run the program:
-Zip File Name: CS 249_Homework4_Mayuri Wadkar.zip
+Instructions to clone the repository from Git Bash:
 
-1.	Unzip above zip file.
-2.	In command prompt, change directory to location of file unzipped in step 1. 
-> cd CS 249_Homework4_Mayuri Wadkar\convergecast
+$ git clone https://github.com/Mayuri-Wad-012447851/CS-249-Distributed-Computing
+Cloning into 'CS-249-Distributed-Computing'...
+remote: Counting objects: 36, done.
+remote: Compressing objects: 100% (32/32), done.
+remote: Total 36 (delta 4), reused 35 (delta 3), pack-reused 0
+Unpacking objects: 100% (36/36), done.
 
-3.	To compile and run, issue following commands:
+Instructions to run the program from command prompt:
+
+1. In command prompt, change directory to location of file (cloning location). 
+2. To compile and run, issue following commands:
 
 Command 1: 
-C:\Users\mayur\Desktop\CS 249_Homework4_Mayuri Wadkar\convergecast>"C:\Program Files\Java\jdk1.8.0_121\bin\javac" *.java
+$..\CS-249-Distributed-Computing\HW4-Convergecast\src>"C:\Program Files\Java\jdk1.8.0_121\bin\javac" *.java
 
-Command2: go to parent directory
-	C:\Users\mayur\Desktop\CS 249_Homework4_Mayuri Wadkar\convergecast>cd..
-
-	Command3:
-C:\Users\mayur\Desktop\CS 249_Homework4_Mayuri Wadkar>"C:\Program Files\Java\jdk1.8.0_121\bin\java" convergecast.Main
+Command 2:
+$..\CS-249-Distributed-Computing\HW4-Convergecast\src>"C:\Program Files\Java\jdk1.8.0_121\bin\java" Main
 
 Overview:
-This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. Implementation has following classes:
+This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. 
+Implementation has following classes:
 
 Main.java
 	In this module, a binary tree is populated with processor nodes, their left and right children. It also contains a main() method, which wakes the root up by sending <M> to its buffer. 
@@ -39,29 +42,39 @@ A tree is given in which each node has an integer (> 0) value stored.
  
 
 Output:
-       2               
-      / \      
-    /     \     
-   /       \    
-   7       5       
-  / \       \   
- /   \       \  
- 2   6       9   
-    / \     /   
-    5 11     4   
-                                
-Node: 2Max at me : 2
-Node: 5Max at me : 5
-Node: 11Max at me : 11
-Node: 6Max at me : 11
-Node: 7Max at me : 11
-Node: 4Max at me : 4
-Node: 9Max at me : 9
-Node: 5Max at me : 9
-Node: 2Max at me : 11
 
-MaxElementAtMe:	
-11
+       2
+      / \
+     /   \
+    /     \
+   /       \
+   7       5
+  / \       \
+ /   \       \
+ 2   6       9
+    / \     /
+    5 11     4
 
-Traversed Path:	
+
+Node 2  Max element at me : 2
+
+Node 5  Max element at me : 5
+
+Node 11 Max element at me : 11
+
+Node 6  Max element at me : 11
+
+Node 7  Max element at me : 11
+
+Node 4  Max element at me : 4
+
+Node 9  Max element at me : 9
+
+Node 5  Max element at me : 9
+
+Node 2  Max element at me : 11
+
+---------Max at Root Node:      11
+
+---------Traversed path at Root Node:
 (2) (5) (11) (6) (7) (4) (9) (5) (2)
