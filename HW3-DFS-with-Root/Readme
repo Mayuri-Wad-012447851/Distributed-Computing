@@ -1,0 +1,69 @@
+Project Title: Java Implementation for DFS Spanning tree with specified root
+
+Description:
+This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. This is a java implementation of DFS spanning tree with specified root in the graph. There is a Buffer class that extends Java Observable, a Processor that implements Java Observer, and a Message enum class that contains the values {M, PARENT, ALREADY}.
+
+Overview:
+Main.java
+	In this module, a graph is populated with processors and neighbors using map.  It accepts user input to generate a graph. It also contains a main() method, which wakes the root up by sending <M> to its buffer. Two functions, to print the input graph and output spanning tree, have been implemented within this class
+
+Processor.java
+	This module implements Observer interface and thus provides implementation for update() method of observer. Update method decides processor's behavior after being notified by a change in observable buffer. Every processor calls an explore() method to discover children and to send <M> to all its neighbors. 
+
+Message.java
+It contains Message enum with values PARENT, ALREADY and M.
+
+Buffer.java
+Buffer is an observable of a processor and it notifies its processor instance of any change in its state.
+Input:
+A graph in the form of adjacency list.
+Map <Processor, List<Processor> >
+where, 
+	key = Processor
+	value = list of neighbor processors
+E.g.
+---------Input Graph-------
+P0 --> [P1 P2 P3 ]
+P1 --> [P0 P2 P4 ]
+P2 --> [P0 P1 P5 ]
+P3 --> [P0 ]
+P4 --> [P1 P5 ]
+P5 --> [P2 P4 ]
+
+
+
+Output:
+User will be prompted to enter id for a processor, which will act as a root of spanning tree.
+Example 1 :
+Enter root node:	
+5
+---------Final Spanning Tree-------
+
+P0 --> [P1 P3 ]
+P1 --> [P4 ]
+P2 --> [P0 ]
+P3 --> []
+P4 --> []
+P5 --> [P2 ]
+
+Example 2:
+Enter root node:	
+2
+---------Final Spanning Tree-------
+
+P0 --> [P1 P3 ]
+P1 --> [P4 ]
+P2 --> [P0 ]
+P3 --> []
+P4 --> [P5 ]
+P5 --> []
+
+Example 3:
+Enter root node:	
+6
+Numbers between 0 to 5 are acceptible
+
+Authors:
+Mayuri Wadkar
+Eric Han
+Sonali Mishra

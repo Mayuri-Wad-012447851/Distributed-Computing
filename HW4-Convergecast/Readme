@@ -1,0 +1,67 @@
+Project Title:  Java Implementation of the converge-cast algorithm as a recursion.
+
+Instructions to run the program:
+Zip File Name: CS 249_Homework4_Mayuri Wadkar.zip
+
+1.	Unzip above zip file.
+2.	In command prompt, change directory to location of file unzipped in step 1. 
+> cd CS 249_Homework4_Mayuri Wadkar\convergecast
+
+3.	To compile and run, issue following commands:
+
+Command 1: 
+C:\Users\mayur\Desktop\CS 249_Homework4_Mayuri Wadkar\convergecast>"C:\Program Files\Java\jdk1.8.0_121\bin\javac" *.java
+
+Command2: go to parent directory
+	C:\Users\mayur\Desktop\CS 249_Homework4_Mayuri Wadkar\convergecast>cd..
+
+	Command3:
+C:\Users\mayur\Desktop\CS 249_Homework4_Mayuri Wadkar>"C:\Program Files\Java\jdk1.8.0_121\bin\java" convergecast.Main
+
+Overview:
+This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. Implementation has following classes:
+
+Main.java
+	In this module, a binary tree is populated with processor nodes, their left and right children. It also contains a main() method, which wakes the root up by sending <M> to its buffer. 
+
+Processor.java
+	This module implements Observer interface and thus provides implementation for update() method of observer. Update method decides processor's behavior after being notified by a change in observable buffer.
+Initially I have set a value of variable max for each Processor instance as its own value. Whenever a message <M> is received by a Processor, it forwards <M> to its left or right children. Once all the nodes in a tree receive <M>, the leaf nodes will start sending PARENT message to parent nodes with max element information.
+
+Message.java
+It contains Message enum with values PARENT and M.
+
+Buffer.java
+Buffer is an observable of a processor and it notifies its processor instance of any change in its state.
+
+Input:
+A tree is given in which each node has an integer (> 0) value stored.
+ 
+
+Output:
+       2               
+      / \      
+    /     \     
+   /       \    
+   7       5       
+  / \       \   
+ /   \       \  
+ 2   6       9   
+    / \     /   
+    5 11     4   
+                                
+Node: 2Max at me : 2
+Node: 5Max at me : 5
+Node: 11Max at me : 11
+Node: 6Max at me : 11
+Node: 7Max at me : 11
+Node: 4Max at me : 4
+Node: 9Max at me : 9
+Node: 5Max at me : 9
+Node: 2Max at me : 11
+
+MaxElementAtMe:	
+11
+
+Traversed Path:	
+(2) (5) (11) (6) (7) (4) (9) (5) (2)
