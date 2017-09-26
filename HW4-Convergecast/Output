@@ -1,0 +1,37 @@
+Output:
+
+       2
+      / \
+     /   \
+    /     \
+   /       \
+   7       5
+  / \       \
+ /   \       \
+ 2   6       9
+    / \     /
+    5 11     4
+
+
+Node 2  Max element at me : 2
+
+Node 5  Max element at me : 5
+
+Node 11 Max element at me : 11
+
+Node 6  Max element at me : 11
+
+Node 7  Max element at me : 11
+
+Node 4  Max element at me : 4
+
+Node 9  Max element at me : 9
+
+Node 5  Max element at me : 9
+
+Node 2  Max element at me : 11
+
+---------Max at Root Node:      11
+
+---------Traversed path at Root Node:
+(2) (5) (11) (6) (7) (4) (9) (5) (2)

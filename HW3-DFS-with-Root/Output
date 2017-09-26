@@ -1,0 +1,43 @@
+Output:
+
+Enter a specific root node to start from (Values from 0-5):	
+5
+
+Input Graph:
+
+P0: [P1 P2 P3 ]
+P1: [P0 P2 P4 ]
+P2: [P0 P1 P5 ]
+P3: [P0 ]
+P4: [P1 P5 ]
+P5: [P5 P2 P4 ]
+
+
+	<M> received at P5
+	<M> received at P2
+	<M> received at P0
+	<M> received at P1
+	<M> received at P2
+	<ALREADY> received at P1
+	<M> received at P4
+	<M> received at P5
+	<ALREADY> received at P4
+	<PARENT> received at P1
+	<PARENT> received at P0
+	<M> received at P3
+	<PARENT> received at P0
+	<PARENT> received at P2
+	<M> received at P1
+	<ALREADY> received at P2
+	<PARENT> received at P5
+	<M> received at P4
+	<ALREADY> received at P5
+
+Final Spanning Tree:
+
+P0: [P1 P3 ]
+P1: [P4 ]
+P2: [P0 ]
+P3: []
+P4: []
+P5: [P2 ]
