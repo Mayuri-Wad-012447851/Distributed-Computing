@@ -1,0 +1,69 @@
+Project Title:  Java Implementation of the converge-cast algorithm as a recursion.
+
+Instructions to run the program:
+
+$ git clone https://github.com/Mayuri-Wad-012447851/CS-249-Distributed-Computing
+Cloning into 'CS-249-Distributed-Computing'...
+remote: Counting objects: 36, done.
+remote: Compressing objects: 100% (32/32), done.
+remote: Total 36 (delta 4), reused 35 (delta 3), pack-reused 0
+Unpacking objects: 100% (36/36), done.
+
+Instructions to run the program from command prompt:
+
+1. In command prompt, change directory to location of file (cloning location). 
+2. To compile and run, issue following commands:
+
+Command 1: 
+$..\CS-249-Distributed-Computing\HW4-Convergecast (recursive without message passing)\src>"C:\Program Files\Java\jdk1.8.0_121\bin\javac" *.java
+
+Command 2:
+$..\CS-249-Distributed-Computing\HW4-Convergecast (recursive without message passing)\src>"C:\Program Files\Java\jdk1.8.0_121\bin\java" Main
+
+Overview:
+This is homework assignment for CS249 Distributed Computing course at SJSU, Fall 2017. Implementation has following classes:
+
+Main.java
+	In this module, a binary tree is populated with processor nodes, their left and right children. It also contains a main() method, which wakes the root up by sending <M> to its buffer. 
+	Main class has a findMaxElement() method, which finds the value of maximum element in a tree recursively. Each processor node calls this method to compute max element for its left and right subtrees. Each and every node in the tree returns a max value computed to its parent. Thus, the root has maximum value element at last.
+
+Processor.java
+	Processor class has the following members:
+	public class Processor {
+	int proc_data;
+	Processor left;
+Processor right; }
+	
+	BTreePrinter.java
+		This class prints binary tree representation.
+Reference: https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+Input:
+A tree is given in which each node has an integer (> 0) value stored.
+ 
+
+Output:
+       2               
+      / \       
+     /   \      
+    /     \     
+   /       \    
+   7       5       
+  / \       \   
+ /   \       \  
+ 2   6       9   
+    / \     /   
+    5 11     4   
+                                
+Processor 2:	MaxElementAtMe:	max(-2147483648,2) = 2
+Processor 5:	MaxElementAtMe:	max(-2147483648,5) = 5
+Processor 11:	MaxElementAtMe:	max(-2147483648,11) = 11
+Processor 6:	MaxElementAtMe:	max(11,6) = 11
+Processor 7:	MaxElementAtMe:	max(11,7) = 11
+Processor 4:	MaxElementAtMe:	max(-2147483648,4) = 4
+Processor 9:	MaxElementAtMe:	max(4,9) = 9
+Processor 5:	MaxElementAtMe:	max(9,5) = 9
+Processor 2:	MaxElementAtMe:	max(11,2) = 11
+
+Max Element of Tree:	11
+
+Traversed Path:	2-5-11-6-7-4-9-5-2-
