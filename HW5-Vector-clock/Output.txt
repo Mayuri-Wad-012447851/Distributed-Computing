@@ -1,0 +1,65 @@
+VectorClock after compute event at P2
+[0 0 1 ]
+P0 SEND to P1
+VectorClock after SEND event at P0
+[1 0 0 ]
+SEND event found so it is a RECEIVE event at this P1
+VectorClock after this RECEIVE event at P1
+[1 0 0 ]
+VectorClock after compute event at P2
+[0 0 2 ]
+VectorClock after RECEIVE event at P1
+[1 1 0 ]
+P2 SEND to P1
+VectorClock after SEND event at P2
+[0 0 3 ]
+SEND event found so it is a RECEIVE event at this P1
+VectorClock after this RECEIVE event at P1
+[0 0 3 ]
+VectorClock after RECEIVE event at P1
+[1 2 3 ]
+P0 SEND to P2
+VectorClock after SEND event at P0
+[2 0 0 ]
+SEND event found so it is a RECEIVE event at this P2
+VectorClock after this RECEIVE event at P2
+[2 0 0 ]
+VectorClock after RECEIVE event at P2
+[2 0 4 ]
+P2 SEND to P1
+VectorClock after SEND event at P2
+[2 0 5 ]
+SEND event found so it is a RECEIVE event at this P1
+VectorClock after this RECEIVE event at P1
+[2 0 5 ]
+P1 SEND to P2
+VectorClock after SEND event at P1
+[2 3 5 ]
+SEND event found so it is a RECEIVE event at this P2
+VectorClock after this RECEIVE event at P2
+[2 3 5 ]
+VectorClock after compute event at P0
+[3 0 0 ]
+VectorClock after RECEIVE event at P2
+[2 3 6 ]
+P1 SEND to P0
+VectorClock after SEND event at P1
+[2 4 5 ]
+SEND event found so it is a RECEIVE event at this P0
+VectorClock after this RECEIVE event at P0
+[2 4 5 ]
+VectorClock after RECEIVE event at P0
+[4 4 5 ]
+VectorClock after compute event at P2
+[2 3 7 ]
+VectorClock after compute event at P0
+[5 4 5 ]
+Event count at p0: 5
+
+Vector Clock at Processor P0:	[5 4 5 ]
+Event count at p1: 4
+
+Vector Clock at Processor P1:	[2 4 5 ]
+Event count at p2: 7
+
+Vector Clock at Processor P2:	[2 3 7 ]
