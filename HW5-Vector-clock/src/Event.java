@@ -1,20 +1,26 @@
-package VectorClock;
-
+/**
+ * Vector Clock Implementation
+ * Event class represents an event happening at fromProcessor and toProcessor
+ * @author Mayuri Wadkar, Eric Han, Sonali Mishra
+ *
+ */
 public class Event {
 	private EventType eventtype;
 	private Processor fromProcessor;
 	private Processor toProcessor;
-	
+	public Event(EventType et) {
+		setEventType(et);
+	}
 	
 	public Event(EventType et, Processor from,Processor to) {
-		setEventtype(et);
+		setEventType(et);
 		setFromProcessor(from);
 		setToProcessor(to);
 	}
-	public EventType getEventtype() {
+	public EventType getEventType() {
 		return eventtype;
 	}
-	public void setEventtype(EventType eventtype) {
+	public void setEventType(EventType eventtype) {
 		this.eventtype = eventtype;
 	}
 	public Processor getFromProcessor() {

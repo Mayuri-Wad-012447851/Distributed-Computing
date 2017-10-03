@@ -1,7 +1,10 @@
-package VectorClock;
-
 import java.util.Arrays;
 
+/**
+ * VectorClock class stores integer array of timestamp
+ * @author Mayuri Wadkar, Eric Han, Sonali Mishra
+ *
+ */
 public class VectorClock {
 	private int[] timestampArray;
 	public VectorClock(int numberOfProcessors) {
@@ -23,18 +26,4 @@ public class VectorClock {
 		return "VectorClock [vc=" + Arrays.toString(this.getTimestampArray()) + "]";
 	}
 	
-	public int compareTo(VectorClock receivedVC) {
-		// TODO Auto-generated method stub
-		//return -1 if 
-		//return 0 if 
-		//return 1 if 
-		//return 2 if not comparable
-		int[] ts = this.getTimestampArray();
-		int[] receivedTs = receivedVC.getTimestampArray();
-//		if ts[0] != receivedTs[0];
-//			return 0;
-//		if ts[1] != receivedTs[1];
-//			return 
-		return 0;
-	}
 }
