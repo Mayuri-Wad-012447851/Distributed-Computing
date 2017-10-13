@@ -21,6 +21,7 @@ public class Processor implements Observer {
 	boolean trackInitiatorProc;
 	//keeping a count of MARKER messages at this processor
 	private Map<Processor, Integer> markerCount = null;
+	private int messageCount;
 	
 	public Processor(int id, List<Buffer> inChannels, List<Buffer> outChannels) {
 		this.procID = id;
@@ -73,6 +74,35 @@ public class Processor implements Observer {
 
 	public void setMarkerCount(Map<Processor, Integer> markerCount) {
 		this.markerCount = markerCount;
+	}
+	
+
+	public int getMessageCount() {
+		return messageCount;
+	}
+
+
+	public void setMessageCount(int messageCount) {
+		this.messageCount = messageCount;
+	}
+	
+	public int getProcID() {
+		return procID;
+	}
+
+
+	public void setProcID(int procID) {
+		this.procID = procID;
+	}
+
+
+	public boolean isTrackInitiatorProc() {
+		return trackInitiatorProc;
+	}
+
+
+	public void setTrackInitiatorProc(boolean trackInitiatorProc) {
+		this.trackInitiatorProc = trackInitiatorProc;
 	}
 
 

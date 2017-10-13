@@ -6,7 +6,7 @@ import java.util.List;
  */
 public class Main {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
     	
     	//Channel from P1 to P2
     	Buffer channelP12 = new Buffer("P12");
@@ -49,9 +49,7 @@ public class Main {
         Processor processor3 = new Processor(3, inChannelsP3, outChannelsP3); //Only observes in channels.
         
         Algorithm a = new Algorithm(processor1, processor2, processor3);
-        a.executionPlanP1();
-		a.executionPlanP2();
-		a.executionPlanP3();
+        a.executionPlan();
         processor1.initiateSnapShot();
         System.out.println("Processor2's message count: " + processor2.getMessageCount());
         System.out.println("Processor3's message count: " + processor3.getMessageCount());
