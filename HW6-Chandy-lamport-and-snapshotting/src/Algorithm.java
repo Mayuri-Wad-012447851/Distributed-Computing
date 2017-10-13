@@ -37,13 +37,42 @@ public class Algorithm {
 
     // Write hard coded execution plan for processors
     public void executionPlanP1() {
-
-
+    	compute(processor2);
+        compute(processor2);
+        compute(processor2);
+        compute(processor2);
+		for (Buffer c : processor2.outChannels) {
+			processor2.sendMessageTo(new Message(MessageType.ALGORITHM), c);
+			processor2.sendMessageTo(new Message(MessageType.COMPUTATION), c);
+			processor2.sendMessageTo(new Message(MessageType.RECEIVE), c);
+			processor2.sendMessageTo(new Message(MessageType.SEND), c);
+		}
     }
 
     // Write hard coded execution plan for processors
     public void executionPlanP2() {
-
+    	compute(processor3);
+        compute(processor3);
+        compute(processor3);
+        compute(processor3);
+		for (Buffer c : processor3.outChannels) {
+			processor3.sendMessageTo(new Message(MessageType.ALGORITHM), c);
+			processor3.sendMessageTo(new Message(MessageType.SEND), c);
+			processor3.sendMessageTo(new Message(MessageType.RECEIVE), c);
+			processor3.sendMessageTo(new Message(MessageType.COMPUTATION), c);
+		}
+		/**
+		 * TODO: Homework: Implement send message from processor1 to different processors. Add a time gap betweeen two different
+		 *                send events. Add computation events between two different sends.
+		 *      [Hint: Create a loop that kills time, sleep , wait on some value etc..]
+		 *
+		 */
+		        for(Buffer c : processor1.outChannels) {
+		        		Message m = new Message(MessageType.SEND);
+		        		processor1.sendMessageTo(m, c);
+		        		compute(processor1);
+		        		Thread.sleep(200);
+		        }
 
     }
 
