@@ -61,18 +61,6 @@ public class Algorithm {
 			processor3.sendMessgeTo(new Message(MessageType.RECEIVE), c);
 			processor3.sendMessgeTo(new Message(MessageType.COMPUTATION), c);
 		}
-		/**
-		 * TODO: Homework: Implement send message from processor1 to different processors. Add a time gap betweeen two different
-		 *                send events. Add computation events between two different sends.
-		 *      [Hint: Create a loop that kills time, sleep , wait on some value etc..]
-		 *
-		 */
-		        for(Buffer c : processor1.getOutChannels()) {
-		        		Message m = new Message(MessageType.SEND);
-		        		processor1.sendMessgeTo(m, c);
-		        		compute(processor1);
-		        		Thread.sleep(200);
-		        }
 
     }
 
