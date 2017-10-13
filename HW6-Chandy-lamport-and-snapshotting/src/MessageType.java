@@ -1,14 +1,11 @@
 /**
  * Messages that can be passed
- * @author Sample
+ * @author Mayuri Wadkar
  */
 public enum  MessageType {
-	/**
-	 * Indicates that a computation event is being performed
-	 */
     COMPUTATION,
+    SEND,
+    RECEIVE,
 	ALGORITHM,
-	MARKER,
-	RECEIVE,
-	SEND
+	MARKER
 }

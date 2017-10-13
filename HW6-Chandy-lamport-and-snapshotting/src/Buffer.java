@@ -4,9 +4,8 @@ import java.util.Observable;
 
 /**
  * Observable Buffer of each node
- * @author Mayuri Wadkar
+ * Each channel should have a buffer associated with it.
  */
-//A channel should have a buffer associated with it.
 public class Buffer extends Observable {
     String label;
     private List<Message> messages;
