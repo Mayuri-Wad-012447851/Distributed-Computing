@@ -102,9 +102,27 @@ public class Algorithm {
 			
 			System.out.println("\nComputing maximal consistent cut at {2,2,6}..\n");
 			
-			int[] result2 = computeMaximumConsistentCut(new int[]{2,2,6});
+			int[] result1 = computeMaximumConsistentCut(new int[]{2,2,6});
+			System.out.println("\nMaximum consistent cut:");
+			printArray(result1);
+			
+			System.out.println("\nComputing maximal consistent cut at {5,5,7}..\n");
+			
+			int[] result2 = computeMaximumConsistentCut(new int[]{5,5,7});
 			System.out.println("\nMaximum consistent cut:");
 			printArray(result2);
+			
+			System.out.println("\nComputing maximal consistent cut at {4,4,6}..\n");
+			
+			int[] result3 = computeMaximumConsistentCut(new int[]{4,4,6});
+			System.out.println("\nMaximum consistent cut:");
+			printArray(result3);
+			
+			System.out.println("\nComputing maximal consistent cut at {3,4,4}..\n");
+			
+			int[] result4 = computeMaximumConsistentCut(new int[]{3,4,4});
+			System.out.println("\nMaximum consistent cut:");
+			printArray(result4);
 			
 			
 		} catch (Exception e) {
@@ -116,64 +134,11 @@ public class Algorithm {
 	 * this method computes Maximum Consistent Cut given an inconsistent cut as input 
 	 */
 	public int[] computeMaximumConsistentCut(int[] inputcut) {
-		int[] result = new int[noOfProcessors];
 		
-		//getting list of events and their corresponding clock values for 3 processors
-		ArrayList<Entry<VectorClock, Event>> p0store = p0.getStore();
-		ArrayList<Entry<VectorClock, Event>> p1store = p1.getStore();
-		ArrayList<Entry<VectorClock, Event>> p2store = p2.getStore();
-		
-		System.out.println("\nEvents and VCs at P0:");
-		for(Entry<VectorClock, Event> store:p0store) {
-			System.out.print(store.getKey());
-			System.out.println(store.getValue().getEventType());
-		}
-		System.out.println("\nEvents and VCs at P1:");
-		for(Entry<VectorClock, Event> store:p1store) {
-			System.out.print(store.getKey());
-			System.out.println(store.getValue().getEventType());
-		}
-		System.out.println("\nEvents and VCs at P2:");
-		for(Entry<VectorClock, Event> store:p2store) {
-			System.out.print(store.getKey());
-			System.out.println(store.getValue().getEventType());
-		}
-		
-		for(int i = 0; i < inputcut.length; i++) {
-			int index = inputcut[i]-1;
-			Processor currentProc = null;
-			if(this.p0.getProcID() == i) {
-				currentProc = this.p0;
-			}
-			else if(this.p1.getProcID() == i) {
-				currentProc = this.p1;
-			}
-			else if(this.p2.getProcID() == i) {
-				currentProc = this.p2;
-			}
-			ArrayList<Entry<VectorClock, Event>> currentStore = currentProc.getStore();
-			while(true) {
-				Entry<VectorClock, Event> procEntry = currentStore.get(index);
-				if(procEntry.getValue().getEventType() == EventType.COMPUTE || 
-						procEntry.getValue().getEventType() == EventType.SEND) {
-					result[i] = index+1;
-					break;
-				}
-				else {
-					//if the current event in the store is receive event
-					Processor fromProc = procEntry.getValue().getFromProcessor();
-					int[] clk = procEntry.getKey().getTimestampArray();
-					if(clk[fromProc.getProcID()] <= inputcut[fromProc.getProcID()]) {
-						result[i] = index+1;
-						break;
-					}
-					else {
-						index = index-1;
-					}
-				}
-			}
-		}
-		return result;
+		int one = p0.calculateMaximumCut(inputcut);
+		int two = p1.calculateMaximumCut(inputcut);
+		int three = p2.calculateMaximumCut(inputcut);
+		return new int[] {one, two, three};
 	}
 	
 	/**

@@ -46,7 +46,6 @@ public class Processor implements Observer {
     public int getEventCount() {
     		return this.eventCount;
     }
-    
     public void setEvents(List<Event> eventList) {
 		this.eventList = eventList;
 	}
@@ -166,7 +165,26 @@ public class Processor implements Observer {
 			break;
 		}
     }
-    
+    public int calculateMaximumCut(int[] inputcut) {
+    		int cut = inputcut[this.procID]-1;
+    		int result = 0;
+    		Entry<VectorClock, Event> entry = store.get(cut);
+    		EventType eventtype = entry.getValue().getEventType();
+		if(eventtype == EventType.COMPUTE || eventtype == EventType.SEND) {
+			result = cut + 1;
+		}
+		else if(entry.getValue().getEventType() == EventType.RECEIVE) {
+			//if the current event in the store is receive event
+			Processor fromProc = entry.getValue().getFromProcessor();
+			int[] clk = entry.getKey().getTimestampArray();
+			if(clk[fromProc.getProcID()] <= inputcut[fromProc.getProcID()]) {
+				result = cut +1;
+			} else {
+				return cut;
+			}
+		}
+    		return result;
+    }
     /**
      * this method prints vector time-stamp array to console
      * @param array		time-stamp
