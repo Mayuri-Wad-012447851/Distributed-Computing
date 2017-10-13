@@ -34,6 +34,47 @@ public class Processor implements Observer {
 			inChannel.addObserver(this);
 		}
 	}
+	
+
+	public List<Buffer> getInChannels() {
+		return inChannels;
+	}
+
+
+	public void setInChannels(List<Buffer> inChannels) {
+		this.inChannels = inChannels;
+	}
+
+
+	public List<Buffer> getOutChannels() {
+		return outChannels;
+	}
+
+
+	public void setOutChannels(List<Buffer> outChannels) {
+		this.outChannels = outChannels;
+	}
+
+
+	public Map<Buffer, List<Message>> getChannelState() {
+		return channelState;
+	}
+
+
+	public void setChannelState(Map<Buffer, List<Message>> channelState) {
+		this.channelState = channelState;
+	}
+
+
+	public Map<Processor, Integer> getMarkerCount() {
+		return markerCount;
+	}
+
+
+	public void setMarkerCount(Map<Processor, Integer> markerCount) {
+		this.markerCount = markerCount;
+	}
+
 
 	/**
 	 * This is a dummy implementation which will record current state of this processor
