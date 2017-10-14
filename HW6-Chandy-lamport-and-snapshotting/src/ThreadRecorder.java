@@ -59,7 +59,7 @@ public class ThreadRecorder extends Thread {
 				for(Message msg:recordedMessagesSinceMarker) {
 					System.out.print(msg.getMessageType()+",");
 				}
-				System.out.print("]");
+				System.out.print("]\n");
 				break;
 			}
 			recordedMessagesSinceMarker.add(message);
