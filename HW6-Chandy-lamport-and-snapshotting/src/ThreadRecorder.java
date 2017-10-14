@@ -48,11 +48,16 @@ public class ThreadRecorder extends Thread {
 
 	@Override
 	public void run() {
+		//creating ThreadRecorder instance to start threaded recording on channel
+//		System.out.print("Messages at channel "+channelToRecord.getLabel()+"--> [");
+//		for(Message message:channelToRecord.getMessages()) {
+//			System.out.print(message.getMessageType()+",");
+//		}
+//		System.out.println("]");
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		int lastIdx = channelToRecord.getTotalMessageCount() - 1;
 		int count = lastIdx;
@@ -63,15 +68,19 @@ public class ThreadRecorder extends Thread {
 				System.out.println("Received duplicate marker...stop recording at channel "+channelToRecord.getLabel());
 				System.out.print("Messages Recorded since marker until duplicate marker:\t [");
 				for(Message msg:recordedMessagesSinceMarker) {
-					System.out.print(msg.getMessageType()+",");
+					System.out.print(msg.getMessageType()+" ");
 				}
 				System.out.print("]\n");
 				break;
 			}
 			recordedMessagesSinceMarker.add(message);
 			count--;
+		}try {
+			channelState.put(channelToRecord, recordedMessagesSinceMarker);
+		}catch(NullPointerException e) {
+			
 		}
-		channelState.put(channelToRecord, recordedMessagesSinceMarker);
+		
 	}
 
 }

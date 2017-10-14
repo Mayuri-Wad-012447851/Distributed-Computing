@@ -5,6 +5,7 @@ import java.util.Observable;
 public class Buffer extends Observable {
     String label;
     private List<Message> messages;
+    ThreadRecorder recorder;
 
     public Buffer(String label) {
         messages = new ArrayList<>();

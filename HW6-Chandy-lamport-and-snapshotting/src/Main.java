@@ -50,8 +50,8 @@ public class Main {
         
         Algorithm a = new Algorithm(processor1, processor2, processor3);
         //initiating snapshot on processor 1
-        processor1.initiateSnapShot();
         a.execute();
+        
         System.out.println("EOP");	
     }
 

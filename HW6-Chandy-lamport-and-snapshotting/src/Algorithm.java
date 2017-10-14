@@ -37,7 +37,6 @@ public class Algorithm {
 	        processor3.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
         
     }

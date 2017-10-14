@@ -23,6 +23,7 @@ public class Processor extends Thread implements Observer {
 	private Map<Processor, Integer> markerCount = new HashMap<Processor, Integer>();
 	private int messageCount;
 	private List<Processor> executionPlan;
+	private Map<Buffer,ThreadRecorder> channelRecorder = new HashMap<Buffer,ThreadRecorder>();
 	
 	public Processor(int id, List<Buffer> inChannels, List<Buffer> outChannels) {
 		this.procID = id;
@@ -35,6 +36,19 @@ public class Processor extends Thread implements Observer {
 		//adding this processor as an observer to each of its incoming channels
 		for(Buffer inChannel: inChannels) {
 			inChannel.addObserver(this);
+			String threadName = "Thread-"+inChannel.getLabel();
+			ThreadRecorder recorder = new ThreadRecorder(threadName);
+			recorder.setChannel(inChannel);
+			channelRecorder.put(inChannel, recorder);
+			recorder.start();
+			synchronized(recorder) {
+				try {
+					recorder.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -127,21 +141,13 @@ public class Processor extends Thread implements Observer {
 	 * @param channel
 	 */
 	public void recordChannel(Buffer channel) {
-		//creating ThreadRecorder instance to start threaded recording on channel
-//		System.out.print("Messages at channel "+channel.getLabel()+"--> [");
-//		for(Message message:channel.getMessages()) {
-//			System.out.print(message.messageType+",");
-//		}
-		
-		System.out.println("]");
-		String threadName = "Thread-"+channel.getLabel();
-		ThreadRecorder recorder = new ThreadRecorder(threadName);
-		//assigning channel to recorder
-		recorder.setChannel(channel);
+		ThreadRecorder recorder = this.channelRecorder.get(channel);
 		recorder.setChannelState(this.channelState);
 		System.out.println("Recording on in-channel thread :\t"+recorder.getThreadName());
 		//starts recording on channel
-		recorder.start();
+		synchronized(recorder) {
+			recorder.notify();
+		}
 	}
 
 	/**
@@ -161,11 +167,11 @@ public class Processor extends Thread implements Observer {
 	 */
 	public boolean isFirstMarker() {
 		if(markerCount.containsKey(this)) {
-			if(markerCount.get(this) == 0) {
-				return true;
+			if(markerCount.get(this) != 0) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -179,9 +185,10 @@ public class Processor extends Thread implements Observer {
 		
 		switch(type) {
 		case MARKER:
+			
 			Buffer fromChannel = (Buffer) observable;
 			if (isFirstMarker()) {
-				System.out.println("\tFirst Marker at Processor"+this.getProcID());
+				System.out.println("\nFirst Marker at Processor"+this.getProcID());
 				//increasing count of MARKER messages at this processor to track duplicate marker messages
 				if(markerCount.get(this) == null) {
 					markerCount.put(this, 1);
@@ -206,6 +213,7 @@ public class Processor extends Thread implements Observer {
 				
 			} else {
 				System.out.println("Duplicate Marker Message received for Processor"+this.getProcID()+", stopping recording");
+				stopRecording(fromChannel);
 			}
 
 			break;
@@ -218,6 +226,12 @@ public class Processor extends Thread implements Observer {
 		}
 	}
 	
+	private void stopRecording(Buffer fromChannel) {
+		// TODO Auto-generated method stub
+		System.out.println("Recording stopped on recorder thread of channel "+fromChannel.getLabel());
+		this.channelRecorder.get(fromChannel).interrupt();
+	}
+
 	/**
 	 * this method initiates snapshot on current processor
 	 */
@@ -225,7 +239,7 @@ public class Processor extends Thread implements Observer {
 		//recording own state
 		recordMyCurrentState();
 		//Adding dummy marker counts to the initiator node so as to avoid re-recording of its states
-		//markerCount.put(this, 1);
+		markerCount.put(this, 1);
 		//sending marker messages on outgoing channel of current processor
 				for(Buffer outChannel:outChannels) {
 					Message m = new Message(MessageType.MARKER);
@@ -244,6 +258,7 @@ public class Processor extends Thread implements Observer {
             for(Buffer c : this.getOutChannels()) {
             	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
             	compute();
+            	this.initiateSnapShot();
             	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
             }
     	}else if(this.getProcID() == 2) {
