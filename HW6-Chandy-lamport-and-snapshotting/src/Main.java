@@ -52,6 +52,42 @@ public class Main {
         //initiating snapshot on processor 1
         a.execute();
         
+        System.out.println("Channel Buffer");
+        for(Buffer channel:inChannelsP1) {
+        	System.out.print(channel.getTotalMessageCount());
+        	System.out.print(" -"+channel.label);
+        	System.out.print(" -"+channel.getMessages().toString()+"\n");
+        }
+        System.out.println("Channel Buffer");
+        for(Buffer channel:inChannelsP2) {
+        	System.out.print(channel.getTotalMessageCount());
+        	System.out.print(" -"+channel.label);
+        	System.out.print(" -"+channel.getMessages().toString()+"\n");
+        }
+        System.out.println("Channel Buffer");
+        for(Buffer channel:inChannelsP3) {
+        	System.out.print(channel.getTotalMessageCount());
+        	System.out.print(" -"+channel.label);
+        	System.out.print(" -"+channel.getMessages().toString()+"\n");
+        }
+        System.out.println("Channel Buffer");
+        for(Buffer channel:outChannelsP1) {
+        	System.out.print(channel.getTotalMessageCount());
+        	System.out.print(" -"+channel.label);
+        	System.out.print(" -"+channel.getMessages().toString()+"\n");
+        }
+        System.out.println("Channel Buffer");
+        for(Buffer channel:outChannelsP2) {
+        	System.out.print(channel.getTotalMessageCount());
+        	System.out.print(" -"+channel.label);
+        	System.out.print(" -"+channel.getMessages().toString()+"\n");
+        }
+        System.out.println("Channel Buffer");
+        for(Buffer channel:outChannelsP3) {
+        	System.out.print(channel.getTotalMessageCount());
+        	System.out.print(" -"+channel.label);
+        	System.out.print(" -"+channel.getMessages().toString()+"\n");
+        }
         System.out.println("EOP");	
     }
 

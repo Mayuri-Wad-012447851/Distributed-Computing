@@ -258,18 +258,41 @@ public class Processor extends Thread implements Observer {
             	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
             	compute();
             	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
+            	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
+            	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
             }
     	}else if(this.getProcID() == 2) {
     		for (Buffer c1 : this.getOutChannels()) {
+    			try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
     			compute();
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
     			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
     		}
     	}
     	else if(this.getProcID() == 3) {
     		for (Buffer c2 : this.getOutChannels()) {
+    			try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
     			compute();
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
     			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
     		}
     	}

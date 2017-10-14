@@ -19,4 +19,9 @@ public class Message {
 	public MessageType getMessageType() {
 		return messageType;
 	}
+	
+	@Override
+	public String toString() {
+		return this.messageType.toString();
+	}
 }
