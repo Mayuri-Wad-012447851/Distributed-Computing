@@ -123,9 +123,7 @@ public class Processor extends Thread implements Observer {
 	 * This is a dummy implementation which will record current state of this processor
 	 */
 	public void recordMyCurrentState() {
-		System.out.println("\n\tProcessor "+this.getProcID()+" Recording its own state");
-		System.out.println("\tProcessor "+this.getProcID()+" : Recording my registers,program counters,variables...");
-		System.out.println("\tProcessor" +this.getProcID() +"'s message count: " + messageCount);
+		System.out.println("\tProcessor "+this.getProcID()+" : Recording my registers,program counters,variables..."+"\n\tProcessor" +this.getProcID() +"'s message count: " + messageCount);
 	}
 
 	/**
@@ -239,7 +237,7 @@ public class Processor extends Thread implements Observer {
 		//recording own state
 		recordMyCurrentState();
 		//Adding dummy marker counts to the initiator node so as to avoid re-recording of its states
-		markerCount.put(this, 1);
+		markerCount.put(this, markerCount.get(this)+1);
 		//sending marker messages on outgoing channel of current processor
 				for(Buffer outChannel:outChannels) {
 					Message m = new Message(MessageType.MARKER);
@@ -255,10 +253,10 @@ public class Processor extends Thread implements Observer {
 	@Override
     public void run() {
     	if(this.getProcID() == 1) {
+    		this.initiateSnapShot();
             for(Buffer c : this.getOutChannels()) {
             	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
             	compute();
-            	this.initiateSnapShot();
             	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
             }
     	}else if(this.getProcID() == 2) {
