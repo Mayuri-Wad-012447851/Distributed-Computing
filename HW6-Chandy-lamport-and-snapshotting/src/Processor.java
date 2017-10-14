@@ -11,7 +11,7 @@ import java.util.Observer;
  * @author Mayuri Wadkar
  * 
  */
-public class Processor implements Observer {
+public class Processor extends Thread implements Observer {
 
 	private int procID;
 	private List<Buffer> inChannels = new ArrayList<>();
@@ -22,6 +22,7 @@ public class Processor implements Observer {
 	//keeping a count of MARKER messages at this processor
 	private Map<Processor, Integer> markerCount = new HashMap<Processor, Integer>();
 	private int messageCount;
+	private List<Processor> executionPlan;
 	
 	public Processor(int id, List<Buffer> inChannels, List<Buffer> outChannels) {
 		this.procID = id;
@@ -95,6 +96,14 @@ public class Processor implements Observer {
 	public void setTrackInitiatorProc(boolean trackInitiatorProc) {
 		this.trackInitiatorProc = trackInitiatorProc;
 	}
+	
+	public List<Processor> getExecutionPlan() {
+		return executionPlan;
+	}
+
+	public void setExecutionPlan(List<Processor> executionPlan) {
+		this.executionPlan = executionPlan;
+	}
 
 	/**
 	 * This is a dummy implementation which will record current state of this processor
@@ -119,10 +128,11 @@ public class Processor implements Observer {
 	 */
 	public void recordChannel(Buffer channel) {
 		//creating ThreadRecorder instance to start threaded recording on channel
-		System.out.print("Messages at channel "+channel.getLabel()+"--> [");
-		for(Message message:channel.getMessages()) {
-			System.out.print(message.messageType+",");
-		}
+//		System.out.print("Messages at channel "+channel.getLabel()+"--> [");
+//		for(Message message:channel.getMessages()) {
+//			System.out.print(message.messageType+",");
+//		}
+		
 		System.out.println("]");
 		String threadName = "Thread-"+channel.getLabel();
 		ThreadRecorder recorder = new ThreadRecorder(threadName);
@@ -203,15 +213,6 @@ public class Processor implements Observer {
 			this.setMessageCount(this.getMessageCount()+1);
 			System.out.println("Algorithm message at processor "+this.getProcID());
 			break;
-		case SEND:
-			this.setMessageCount(this.getMessageCount()+1);
-			System.out.println("Send message at processor "+this.getProcID());
-		case RECEIVE:
-			this.setMessageCount(this.getMessageCount()+1);
-			System.out.println("Receive message at processor "+this.getProcID());
-		case COMPUTATION:
-			this.setMessageCount(this.getMessageCount()+1);
-			System.out.println("Computation message at processor "+this.getProcID());
 		default:
 			break;
 		}
@@ -224,7 +225,7 @@ public class Processor implements Observer {
 		//recording own state
 		recordMyCurrentState();
 		//Adding dummy marker counts to the initiator node so as to avoid re-recording of its states
-		markerCount.put(this, 1);
+		//markerCount.put(this, 1);
 		//sending marker messages on outgoing channel of current processor
 				for(Buffer outChannel:outChannels) {
 					Message m = new Message(MessageType.MARKER);
@@ -236,5 +237,54 @@ public class Processor implements Observer {
 		}
 		
 	}
-
+	
+	@Override
+    public void run() {
+    	if(this.getProcID() == 1) {
+            for(Buffer c : this.getOutChannels()) {
+            	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
+            	compute();
+            	this.sendMessgeTo(new Message(MessageType.ALGORITHM), c);
+            }
+    	}else if(this.getProcID() == 2) {
+    		for (Buffer c1 : this.getOutChannels()) {
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
+    			compute();
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
+    		}
+    	}
+    	else if(this.getProcID() == 3) {
+    		for (Buffer c2 : this.getOutChannels()) {
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    			compute();
+    			this.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
+    		}
+    	}
+    }
+	
+	public void getSnapshot() {
+    	for(Buffer channel:channelState.keySet()) {
+    		System.out.print(channel.getLabel()+" :[");
+    		for(Message msg:channelState.get(channel)) {
+    			System.out.print(msg.getMessageType().toString()+" ");
+    		}
+    		System.out.println("]\n");
+    	}
+    }
+	
+	/**
+     * A dummy computation.
+     * @param p
+     */
+    public void compute() {
+        System.out.println("Doing some computation on Processor" + this.getProcID());
+    }
+    /**
+    *
+    * @param to processor to which message is sent
+    * @param channel the incoming channel on the to processor that will receive this message
+    */
+   public void send(Processor to, Buffer channel) {
+       to.sendMessgeTo(null, channel); // ALGORITHM
+   }
 }

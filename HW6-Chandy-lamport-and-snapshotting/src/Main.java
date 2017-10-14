@@ -49,17 +49,10 @@ public class Main {
         Processor processor3 = new Processor(3, inChannelsP3, outChannelsP3); //Only observes in channels.
         
         Algorithm a = new Algorithm(processor1, processor2, processor3);
-        a.executionPlan();
-        a.executionPlan2();
         //initiating snapshot on processor 1
-        
         processor1.initiateSnapShot();
-        
-        a.executionPlan3();
-        
-        System.out.println("Processor2's message count: " + processor2.getMessageCount());
-        System.out.println("Processor3's message count: " + processor3.getMessageCount());
-
+        a.execute();
+        System.out.println("EOP");	
     }
 
 

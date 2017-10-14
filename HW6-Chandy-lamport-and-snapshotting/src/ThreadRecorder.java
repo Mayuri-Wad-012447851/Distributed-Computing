@@ -48,6 +48,12 @@ public class ThreadRecorder extends Thread {
 
 	@Override
 	public void run() {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int lastIdx = channelToRecord.getTotalMessageCount() - 1;
 		int count = lastIdx;
 		List<Message> recordedMessagesSinceMarker = new ArrayList<>();
