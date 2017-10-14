@@ -21,12 +21,21 @@ public class Buffer extends Observable {
     public String getLabel() {
         return label;
     }
+    
+    
+    public List<Message> getMessages() {
+		return messages;
+	}
 
-    public Message getMessage(int index) {
-        return messages.get(index);
-    }
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
+	
+	public Message getMessage(int index) {
+		return this.getMessages().get(index);
+	}
 
-    public void saveMessage(Message message) {
+	public void saveMessage(Message message) {
         this.messages.add(message);
         setChanged();
         notifyObservers();

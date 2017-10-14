@@ -19,25 +19,27 @@ public class Algorithm {
     public void executionPlan() {
     	compute(processor1);
         compute(processor1);
-        compute(processor2);
-        compute(processor2);
         for(Buffer c : processor1.getOutChannels()) {
     		Message m = new Message(MessageType.SEND);
     		processor1.sendMessgeTo(m, c);
     		compute(processor1);
-    		//Thread.sleep(200);
         }
-        compute(processor2);
+    }
+    
+    public void executionPlan2() {
+    	compute(processor2);
         compute(processor2);
 		for (Buffer c1 : processor2.getOutChannels()) {
 			processor2.sendMessgeTo(new Message(MessageType.ALGORITHM), c1);
 			processor2.sendMessgeTo(new Message(MessageType.COMPUTATION), c1);
 			processor2.sendMessgeTo(new Message(MessageType.RECEIVE), c1);
 			processor2.sendMessgeTo(new Message(MessageType.SEND), c1);
-		}	
-		compute(processor3);
+		}
+    }
+    
+    public void executionPlan3() {
+    	compute(processor3);
         compute(processor3);
-        compute(processor1);
 		for (Buffer c2 : processor3.getOutChannels()) {
 			processor3.sendMessgeTo(new Message(MessageType.ALGORITHM), c2);
 			processor3.sendMessgeTo(new Message(MessageType.SEND), c2);

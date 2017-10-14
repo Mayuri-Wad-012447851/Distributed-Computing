@@ -20,7 +20,7 @@ public class Processor implements Observer {
 	//to keep track of initiator processor
 	boolean trackInitiatorProc;
 	//keeping a count of MARKER messages at this processor
-	private Map<Processor, Integer> markerCount = null;
+	private Map<Processor, Integer> markerCount = new HashMap<Processor, Integer>();
 	private int messageCount;
 	
 	public Processor(int id, List<Buffer> inChannels, List<Buffer> outChannels) {
@@ -28,19 +28,18 @@ public class Processor implements Observer {
 		this.inChannels = inChannels;
 		this.outChannels = outChannels;
 		this.trackInitiatorProc = false;
-		markerCount = new HashMap<Processor, Integer>();
+		markerCount.put(this, 0);
 		channelState = new HashMap<Buffer, List<Message>>();
+		this.messageCount = 0;
 		//adding this processor as an observer to each of its incoming channels
 		for(Buffer inChannel: inChannels) {
 			inChannel.addObserver(this);
 		}
 	}
-	
 
 	public List<Buffer> getInChannels() {
 		return inChannels;
 	}
-
 
 	public void setInChannels(List<Buffer> inChannels) {
 		this.inChannels = inChannels;
@@ -51,26 +50,21 @@ public class Processor implements Observer {
 		return outChannels;
 	}
 
-
 	public void setOutChannels(List<Buffer> outChannels) {
 		this.outChannels = outChannels;
 	}
-
 
 	public Map<Buffer, List<Message>> getChannelState() {
 		return channelState;
 	}
 
-
 	public void setChannelState(Map<Buffer, List<Message>> channelState) {
 		this.channelState = channelState;
 	}
 
-
 	public Map<Processor, Integer> getMarkerCount() {
 		return markerCount;
 	}
-
 
 	public void setMarkerCount(Map<Processor, Integer> markerCount) {
 		this.markerCount = markerCount;
@@ -80,7 +74,6 @@ public class Processor implements Observer {
 	public int getMessageCount() {
 		return messageCount;
 	}
-
 
 	public void setMessageCount(int messageCount) {
 		this.messageCount = messageCount;
@@ -95,24 +88,21 @@ public class Processor implements Observer {
 		this.procID = procID;
 	}
 
-
 	public boolean isTrackInitiatorProc() {
 		return trackInitiatorProc;
 	}
-
 
 	public void setTrackInitiatorProc(boolean trackInitiatorProc) {
 		this.trackInitiatorProc = trackInitiatorProc;
 	}
 
-
 	/**
 	 * This is a dummy implementation which will record current state of this processor
 	 */
 	public void recordMyCurrentState() {
-		System.out.println("Processor "+this.procID+" : Recording my registers...");
-		System.out.println("Processor "+this.procID+" : Recording my program counters...");
-		System.out.println("Processor "+this.procID+" : Recording my local variables...");
+		System.out.println("\n\tProcessor "+this.getProcID()+" Recording its own state");
+		System.out.println("\tProcessor "+this.getProcID()+" : Recording my registers,program counters,variables...");
+		System.out.println("\tProcessor" +this.getProcID() +"'s message count: " + messageCount);
 	}
 
 	/**
@@ -129,6 +119,11 @@ public class Processor implements Observer {
 	 */
 	public void recordChannel(Buffer channel) {
 		//creating ThreadRecorder instance to start threaded recording on channel
+		System.out.print("Messages at channel "+channel.getLabel()+"--> [");
+		for(Message message:channel.getMessages()) {
+			System.out.print(message.messageType+",");
+		}
+		System.out.println("]");
 		String threadName = "Thread-"+channel.getLabel();
 		ThreadRecorder recorder = new ThreadRecorder(threadName);
 		//assigning channel to recorder
@@ -176,6 +171,7 @@ public class Processor implements Observer {
 		case MARKER:
 			Buffer fromChannel = (Buffer) observable;
 			if (isFirstMarker()) {
+				System.out.println("\tFirst Marker at Processor"+this.getProcID());
 				//increasing count of MARKER messages at this processor to track duplicate marker messages
 				if(markerCount.get(this) == null) {
 					markerCount.put(this, 1);
@@ -197,14 +193,25 @@ public class Processor implements Observer {
 				for (Buffer outChannel : outChannels) {
 					sendMessgeTo(new Message(MessageType.MARKER), outChannel);
 				}
+				
 			} else {
-				System.out.println("Duplicate Marker Message received for Processor"+this.procID+", stopping recording");
+				System.out.println("Duplicate Marker Message received for Processor"+this.getProcID()+", stopping recording");
 			}
 
 			break;
 		case ALGORITHM:
-			System.out.println("Processing Algorithm message at processor "+this.procID);
+			this.setMessageCount(this.getMessageCount()+1);
+			System.out.println("Algorithm message at processor "+this.getProcID());
 			break;
+		case SEND:
+			this.setMessageCount(this.getMessageCount()+1);
+			System.out.println("Send message at processor "+this.getProcID());
+		case RECEIVE:
+			this.setMessageCount(this.getMessageCount()+1);
+			System.out.println("Receive message at processor "+this.getProcID());
+		case COMPUTATION:
+			this.setMessageCount(this.getMessageCount()+1);
+			System.out.println("Computation message at processor "+this.getProcID());
 		default:
 			break;
 		}
@@ -218,15 +225,16 @@ public class Processor implements Observer {
 		recordMyCurrentState();
 		//Adding dummy marker counts to the initiator node so as to avoid re-recording of its states
 		markerCount.put(this, 1);
+		//sending marker messages on outgoing channel of current processor
+				for(Buffer outChannel:outChannels) {
+					Message m = new Message(MessageType.MARKER);
+					sendMessgeTo(m,outChannel);
+				}
 		//Starts recording on each of the incoming channels
 		for(Buffer inChannel:inChannels) {
 			recordChannel(inChannel);
 		}
-		//sending marker messages on outgoing channel of current processor
-		for(Buffer outChannel:outChannels) {
-			Message m = new Message(MessageType.MARKER);
-			sendMessgeTo(m,outChannel);
-		}
+		
 	}
 
 }

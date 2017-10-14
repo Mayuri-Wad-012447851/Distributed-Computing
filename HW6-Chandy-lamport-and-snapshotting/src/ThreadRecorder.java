@@ -49,13 +49,21 @@ public class ThreadRecorder extends Thread {
 	@Override
 	public void run() {
 		int lastIdx = channelToRecord.getTotalMessageCount() - 1;
+		int count = lastIdx;
 		List<Message> recordedMessagesSinceMarker = new ArrayList<>();
-		while(lastIdx >= 0) {
+		while(count >= 0) {
 			Message message = channelToRecord.getMessage(lastIdx);
-			if(MessageType.MARKER.equals(message.getMessageType()))
+			if(MessageType.MARKER.equals(message.getMessageType())) {
+				System.out.println("Received duplicate marker...stop recording at channel "+channelToRecord.getLabel());
+				System.out.print("Messages Recorded since marker until duplicate marker:\t [");
+				for(Message msg:recordedMessagesSinceMarker) {
+					System.out.print(msg.getMessageType()+",");
+				}
+				System.out.print("]");
 				break;
+			}
 			recordedMessagesSinceMarker.add(message);
-			lastIdx--;
+			count--;
 		}
 		channelState.put(channelToRecord, recordedMessagesSinceMarker);
 	}
