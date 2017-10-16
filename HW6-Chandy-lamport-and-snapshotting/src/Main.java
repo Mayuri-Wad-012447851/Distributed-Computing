@@ -1,13 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 /**
- * Observable Buffer of each node
+ * Main : This class initiates chandy lamport algorithm
+ * It creates processor instances and assigns their corresponding in and out channels.
+ * @author mayur
+ *
  */
 public class Main {
 
+	private static Logger logger = Logger.getLogger("Main");
+		
     public static void main(String args[]) throws InterruptedException {
     	
+    	// Create channels for 3 Processors P1, P2 & P3
     	//Channel from P1 to P2
     	Buffer channelP12 = new Buffer("P12");
     	//Channel from P1 to P3
@@ -48,48 +57,34 @@ public class Main {
         outChannelsP3.add(channelP32);
         Processor processor3 = new Processor(3, inChannelsP3, outChannelsP3); //Only observes in channels.
         
-        Algorithm a = new Algorithm(processor1, processor2, processor3);
         //initiating snapshot on processor 1
-        a.execute();
+        execute(processor1, processor2, processor3);
         
-        System.out.println("Channel Buffer");
-        for(Buffer channel:inChannelsP1) {
-        	System.out.print(channel.getTotalMessageCount());
-        	System.out.print(" -"+channel.label);
-        	System.out.print(" -"+channel.getMessages().toString()+"\n");
-        }
-        System.out.println("Channel Buffer");
-        for(Buffer channel:inChannelsP2) {
-        	System.out.print(channel.getTotalMessageCount());
-        	System.out.print(" -"+channel.label);
-        	System.out.print(" -"+channel.getMessages().toString()+"\n");
-        }
-        System.out.println("Channel Buffer");
-        for(Buffer channel:inChannelsP3) {
-        	System.out.print(channel.getTotalMessageCount());
-        	System.out.print(" -"+channel.label);
-        	System.out.print(" -"+channel.getMessages().toString()+"\n");
-        }
-        System.out.println("Channel Buffer");
-        for(Buffer channel:outChannelsP1) {
-        	System.out.print(channel.getTotalMessageCount());
-        	System.out.print(" -"+channel.label);
-        	System.out.print(" -"+channel.getMessages().toString()+"\n");
-        }
-        System.out.println("Channel Buffer");
-        for(Buffer channel:outChannelsP2) {
-        	System.out.print(channel.getTotalMessageCount());
-        	System.out.print(" -"+channel.label);
-        	System.out.print(" -"+channel.getMessages().toString()+"\n");
-        }
-        System.out.println("Channel Buffer");
-        for(Buffer channel:outChannelsP3) {
-        	System.out.print(channel.getTotalMessageCount());
-        	System.out.print(" -"+channel.label);
-        	System.out.print(" -"+channel.getMessages().toString()+"\n");
-        }
-        System.out.println("EOP");	
+        threadSleep(2000);
+        logger.info("============== All threads completed ... End of Chandy Lamport Algo =================");	
     }
-
+    
+    public static void execute(Processor processor1, Processor processor2,Processor processor3) {
+        try {
+        	processor2.start();
+            processor3.start();
+        	processor1.start();
+			
+			processor2.join();
+	        processor3.join();
+	        processor1.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        
+    }
+    
+    private static void threadSleep(int msec) {
+		try {
+			Thread.sleep(msec);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

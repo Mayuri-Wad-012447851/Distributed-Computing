@@ -1,20 +1,26 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Logger;
 
 /**
- * 
+ * ThreadRecorder: This thread class is instantiated by processor on receiving first marker message
+ * It monitors incoming channel's state for a processor
+ * It records message seen from first marker until duplicate marker on given channel 
  * @author Mayuri Wadkar
  *
  */
 public class ThreadRecorder extends Thread {
 	
+	private static Logger logger = Logger.getLogger(ThreadRecorder.class.getName());
+	
 	private String threadName;
 	private Buffer channelToRecord;
-	private Map<Buffer, List<Message>> channelState;
+	private List<Message> channelState;
 	
 	public ThreadRecorder(String threadName) {
 		this.threadName = threadName;
+		this.channelState = new ArrayList<Message>();
+		this.channelToRecord = null;
 	}
 	
 	public String getThreadName() {
@@ -33,54 +39,47 @@ public class ThreadRecorder extends Thread {
 		this.channelToRecord = channelToRecord;
 	}
 
-	public synchronized void setChannel(Buffer channel) {
-		this.channelToRecord = channel;
-	}
-	public Buffer getChannel() {
-		return channelToRecord;
-	}
-	public Map<Buffer, List<Message>> getChannelState() {
-		return channelState;
-	}
-	public synchronized void setChannelState(Map<Buffer, List<Message>> channelState) {
-		this.channelState = channelState;
-	}
-
 	@Override
 	public void run() {
-		//creating ThreadRecorder instance to start threaded recording on channel
-//		System.out.print("Messages at channel "+channelToRecord.getLabel()+"--> [");
-//		for(Message message:channelToRecord.getMessages()) {
-//			System.out.print(message.getMessageType()+",");
-//		}
-//		System.out.println("]");
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-		}
-		int lastIdx = channelToRecord.getTotalMessageCount() - 1;
-		int count = lastIdx;
-		List<Message> recordedMessagesSinceMarker = new ArrayList<>();
-		while(count >= 0) {
-			Message message = channelToRecord.getMessage(lastIdx);
-			if(MessageType.MARKER.equals(message.getMessageType())) {
-				System.out.println("Received duplicate marker...stop recording at channel "+channelToRecord.getLabel());
-				System.out.print("Messages Recorded since marker until duplicate marker:\t [");
-				for(Message msg:recordedMessagesSinceMarker) {
-					System.out.print(msg.getMessageType()+" ");
+
+		logger.info("Start recording on in-channel thread :\t"+ this.threadName);
+		// Event loop for Recorder thread
+		while (true) {
+			try {
+				synchronized (this) {
+					wait(2000);	
 				}
-				System.out.print("]\n");
-				break;
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			recordedMessagesSinceMarker.add(message);
-			count--;
-		}try {
-			channelState.put(channelToRecord, recordedMessagesSinceMarker);
-		}catch(NullPointerException e) {
+			
+			
+			StringBuilder sbuf = new StringBuilder();
+			for(Message msg: channelToRecord.getMessages()) {
+				sbuf.append(msg.getMessageType()+" ");
+			}
+			logger.info("Waking up Recorder Thread: "+ this.threadName + ". Processing channelToRecord size : "+ 
+							channelToRecord.getTotalMessageCount() +" Msgs["+ sbuf.toString() +"]");
+			
+			while(!channelToRecord.isEmpty()) {
+				Message message = channelToRecord.getMessage();
+				
+				if(MessageType.MARKER.equals(message.getMessageType())) {
+					// Print Msgs in channel between the two Marker msgs
+					StringBuilder sbuff = new StringBuilder();
+					sbuff.append("Received duplicate marker...Terminating Recorder Thread: "+ this.threadName);
+					sbuff.append("\nMessages Recorded until duplicate marker: ["); 
+					for(Message msg: channelState) {
+						sbuff.append(msg.getMessageType()+" ");
+					}
+					sbuff.append("]  Total recorded msgs ="+ channelState.size());
+					logger.info(sbuff.toString());
+					return;
+				}
+				channelState.add(message);
+			}
 			
 		}
-		
 	}
 
 }

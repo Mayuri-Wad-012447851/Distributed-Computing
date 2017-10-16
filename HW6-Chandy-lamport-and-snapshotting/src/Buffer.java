@@ -1,36 +1,54 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
+/**
+ * Buffer : This class simulates a channel used to share messages between processors
+ * It could be incoming channel for one processor and outgoing channel for another.
+ * It stores a list of messages being passed
+ * @author mayur
+ *
+ */
 public class Buffer extends Observable {
     String label;
-    private List<Message> messages;
+    private Queue<Message> messages;
     ThreadRecorder recorder;
 
     public Buffer(String label) {
-        messages = new ArrayList<>();
+        messages = new ConcurrentLinkedDeque<Message>();
         this.label = label;
     }
+    
     public String getLabel() {
         return label;
     }
-    public List<Message> getMessages() {
+    public Queue<Message> getMessages() {
 		return messages;
 	}
-	public void setMessages(List<Message> messages) {
+	public void setMessages(Queue<Message> messages) {
 		this.messages = messages;
 	}
 	
-	public Message getMessage(int index) {
-		return this.getMessages().get(index);
+	public Message getMessage() {
+		return this.getMessages().poll();
 	}
+	
+	public Message peekMessage() {
+		return this.getMessages().peek();
+	}
+	
 	public void saveMessage(Message message) {
         this.messages.add(message);
         setChanged();
         notifyObservers();
     }
-    int getTotalMessageCount() {
+	
+    public int getTotalMessageCount() {
         return messages.size();
+    }
+    
+    public boolean isEmpty() {
+    	return messages.isEmpty();
     }
 }
 
