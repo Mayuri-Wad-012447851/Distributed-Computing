@@ -1,0 +1,48 @@
+Oct 15, 2017 9:15:35 PM Processor recordMyCurrentState
+INFO: First Marker Received : Processor 1 : Recording my registers,program counters,variables... Processor1's message count: 0
+Oct 15, 2017 9:15:35 PM Processor compute
+INFO: Doing some dummy computations on Processor2
+Oct 15, 2017 9:15:35 PM Processor compute
+INFO: Doing some dummy computations on Processor3
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Start recording on in-channel thread :	ThreadRecorder-P31
+Oct 15, 2017 9:15:35 PM Processor recordMyCurrentState
+INFO: First Marker Received : Processor 3 : Recording my registers,program counters,variables... Processor3's message count: 1
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Waking up Recorder Thread: ThreadRecorder-P31. Processing channelToRecord size : 11 Msgs[ALGORITHM SEND RECEIVE RECEIVE SEND SEND COMPUTE RECEIVE RECEIVE COMPUTE SEND ]
+Oct 15, 2017 9:15:35 PM Processor run
+INFO: Processor2total message count = 11
+Oct 15, 2017 9:15:35 PM Processor run
+INFO: Processor3total message count = 9
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Start recording on in-channel thread :	ThreadRecorder-P21
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Received duplicate marker...Terminating Recorder Thread: ThreadRecorder-P31
+Messages Recorded until duplicate marker: [ALGORITHM SEND RECEIVE RECEIVE SEND SEND COMPUTE RECEIVE RECEIVE COMPUTE SEND ]  Total recorded msgs =11
+Oct 15, 2017 9:15:35 PM Processor recordMyCurrentState
+INFO: First Marker Received : Processor 2 : Recording my registers,program counters,variables... Processor2's message count: 12
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Start recording on in-channel thread :	ThreadRecorder-P23
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Start recording on in-channel thread :	ThreadRecorder-P32
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Waking up Recorder Thread: ThreadRecorder-P21. Processing channelToRecord size : 12 Msgs[ALGORITHM COMPUTE RECEIVE COMPUTE SEND RECEIVE COMPUTE COMPUTE SEND RECEIVE COMPUTE MARKER ]
+Oct 15, 2017 9:15:35 PM ThreadRecorder run
+INFO: Received duplicate marker...Terminating Recorder Thread: ThreadRecorder-P21
+Messages Recorded until duplicate marker: [ALGORITHM COMPUTE RECEIVE COMPUTE SEND RECEIVE COMPUTE COMPUTE SEND RECEIVE COMPUTE ]  Total recorded msgs =11
+Oct 15, 2017 9:15:36 PM Processor compute
+INFO: Doing some dummy computations on Processor1
+Oct 15, 2017 9:15:36 PM Processor run
+INFO: Processor1total message count = 22
+Oct 15, 2017 9:15:37 PM ThreadRecorder run
+INFO: Waking up Recorder Thread: ThreadRecorder-P23. Processing channelToRecord size : 12 Msgs[ALGORITHM COMPUTE SEND COMPUTE ALGORITHM ALGORITHM RECEIVE ALGORITHM COMPUTE COMPUTE ALGORITHM MARKER ]
+Oct 15, 2017 9:15:37 PM ThreadRecorder run
+INFO: Waking up Recorder Thread: ThreadRecorder-P32. Processing channelToRecord size : 12 Msgs[ALGORITHM COMPUTE COMPUTE COMPUTE COMPUTE RECEIVE ALGORITHM COMPUTE COMPUTE ALGORITHM SEND MARKER ]
+Oct 15, 2017 9:15:37 PM ThreadRecorder run
+INFO: Received duplicate marker...Terminating Recorder Thread: ThreadRecorder-P23
+Messages Recorded until duplicate marker: [ALGORITHM COMPUTE SEND COMPUTE ALGORITHM ALGORITHM RECEIVE ALGORITHM COMPUTE COMPUTE ALGORITHM ]  Total recorded msgs =11
+Oct 15, 2017 9:15:37 PM ThreadRecorder run
+INFO: Received duplicate marker...Terminating Recorder Thread: ThreadRecorder-P32
+Messages Recorded until duplicate marker: [ALGORITHM COMPUTE COMPUTE COMPUTE COMPUTE RECEIVE ALGORITHM COMPUTE COMPUTE ALGORITHM SEND ]  Total recorded msgs =11
+Oct 15, 2017 9:15:38 PM Main main
+INFO: ============== All threads completed ... End of Chandy Lamport Algo =================
