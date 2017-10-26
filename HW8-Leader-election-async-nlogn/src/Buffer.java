@@ -1,4 +1,6 @@
+import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Queue;
 
 /**
  * This class simulates a communication channel between two processors
@@ -11,22 +13,27 @@ import java.util.Observable;
  *
  */
 public class Buffer extends Observable {
-	Message message;
-	String label;
+	private Queue<Message> messages;
 	
-	
-	public Buffer(String label) {
-		this.label = label;
+	public Buffer() {
+		this.messages = new LinkedList<Message>();
 	}
 	
-	public void setMessage(Message message) {
-		this.message = message;
+	public void saveMessage(Message message) {
+		this.messages.add(message);
 		setChanged();
 		notifyObservers();
 	}
 
-	public Message getMessage() {
-		return message;
+	public Queue<Message> getMessages() {
+		return messages;
 	}
-
+	
+	public void setMessages(Queue<Message> messages) {
+		this.messages = messages;
+	}
+	
+	public Message getMessage() {
+		return this.messages.remove();
+	}
 }

@@ -3,10 +3,10 @@ public class Message {
 	MessageType type;
 	int phase = 0;
 	int hop = 0;
-	int identifier;
+	Processor sender;
 	
 	
-	public Message(MessageType type) {
+	public Message(MessageType type, Processor sender) {
 		this.type = type;
 	}
 	
@@ -17,21 +17,11 @@ public class Message {
 	 * @param k
 	 * @param hop
 	 */
-	public Message(MessageType type, int id, int k, int hop) {
+	public Message(MessageType type, int k, int hop, Processor sender) {
 		this.type = type;
-		this.identifier = id;
 		this.phase = k;
 		this.hop = hop;
-	}
-	
-	/**
-	 * This constructor is for TERMINATE type of messages
-	 * @param type
-	 * @param id
-	 */
-	public Message(MessageType type, int id) {
-		this.type = type;
-		this.identifier = id;
+		this.sender = sender;
 	}
 	
 	/**
@@ -40,10 +30,10 @@ public class Message {
 	 * @param id
 	 * @param phase
 	 */
-	public Message(MessageType type, int id, int phase) {
+	public Message(MessageType type, int phase, Processor sender) {
 		this.type = type;
-		this.identifier = id;
 		this.phase = phase;
+		this.sender = sender;
 	}
 
 	public MessageType getType() {
@@ -70,12 +60,12 @@ public class Message {
 		this.hop = hop;
 	}
 
-	public int getIdentifier() {
-		return identifier;
+	public Processor getSender() {
+		return sender;
 	}
 
-	public void setIdentifier(int identifier) {
-		this.identifier = identifier;
+	public void setSender(Processor sender) {
+		this.sender = sender;
 	}
 	
 	
