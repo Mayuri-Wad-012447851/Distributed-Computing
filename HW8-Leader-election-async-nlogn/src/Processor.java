@@ -14,7 +14,7 @@ public class Processor extends Thread implements Observer{
 
 	public Processor(int id, Buffer messageBuffer) {
 		this.processorID = id;
-		this.leader = false;
+		this.leader = true;
 		this.phaseLeader = false;
 		this.messageBuffer = messageBuffer;
 		this.messageBuffer.addObserver(this);
@@ -69,6 +69,7 @@ public class Processor extends Thread implements Observer{
 	public void setMessageBuffer(Buffer messageBuffer) {
 		this.messageBuffer = messageBuffer;
 	}
+	
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
@@ -83,37 +84,35 @@ public class Processor extends Thread implements Observer{
 		switch(type) {
 		case PROBE:
 			System.out.println("Processor "+this.processorID+" received probe from Processor "+message.getSender().getProcessorID());
-			if(message.getSender() == this.left) {
-				if(message.getSender() == this) {
-					terminateAsLeader();
+			if(receivedId < this.processorID) {
+				swallow(message);
+			}
+			else {
+				if(message.getSender() == this.left) {
+					
+					if((receivedId > this.processorID) && (receivedHop < Math.pow(2, receivedPhase))) {
+						System.out.println("Processor "+this.processorID+" sending probe to Processor "+this.right.getProcessorID());
+						sendMessageToBuffer(new Message(MessageType.PROBE, receivedPhase, receivedHop+1, sender),this.right.getMessageBuffer());
+					}
+					if((receivedId > this.processorID) && (receivedHop >= Math.pow(2, receivedPhase))) {
+						System.out.println("Processor "+this.processorID+" sending reply to Processor "+this.left.getProcessorID());
+						sendMessageToBuffer(new Message(MessageType.REPLY, receivedPhase, sender), this.left.getMessageBuffer());
+					}
 				}
-				if((receivedId > this.processorID) && (receivedHop < Math.pow(2, receivedPhase))) {
-					System.out.println("Processor "+this.processorID+" sending probe to Processor "+this.right.getProcessorID());
-					sendMessageToBuffer(new Message(MessageType.PROBE, receivedPhase, receivedHop+1, sender),this.right.getMessageBuffer());
-				}
-				if((receivedId > this.processorID) && (receivedHop >= Math.pow(2, receivedPhase))) {
-					System.out.println("Processor "+this.processorID+" sending reply to Processor "+this.left.getProcessorID());
-					sendMessageToBuffer(new Message(MessageType.REPLY, receivedPhase, sender), this.left.getMessageBuffer());
-				}
-				if(receivedId < this.processorID) {
-					swallow(message);
+				else if(message.getSender() == this.right) {
+					
+					if((receivedId > this.processorID) && (receivedHop < Math.pow(2, receivedPhase))) {
+						System.out.println("Processor "+this.processorID+" sending probe to Processor "+this.left.getProcessorID());
+						sendMessageToBuffer(new Message(MessageType.PROBE, receivedPhase, receivedHop+1, sender),this.left.getMessageBuffer());
+					}
+					if((receivedId > this.processorID) && (receivedHop >= Math.pow(2, receivedPhase))) {
+						System.out.println("Processor "+this.processorID+" sending reply to Processor "+this.right.getProcessorID());
+						sendMessageToBuffer(new Message(MessageType.REPLY,receivedId, receivedPhase, sender), this.right.getMessageBuffer());
+					}
 				}
 			}
-			if(message.getSender() == this.right) {
-				if(message.getSender() == this) {
-					terminateAsLeader();
-				}
-				if((receivedId > this.processorID) && (receivedHop < Math.pow(2, receivedPhase))) {
-					System.out.println("Processor "+this.processorID+" sending probe to Processor "+this.left.getProcessorID());
-					sendMessageToBuffer(new Message(MessageType.PROBE, receivedPhase, receivedHop+1, sender),this.left.getMessageBuffer());
-				}
-				if((receivedId > this.processorID) && (receivedHop >= Math.pow(2, receivedPhase))) {
-					System.out.println("Processor "+this.processorID+" sending reply to Processor "+this.right.getProcessorID());
-					sendMessageToBuffer(new Message(MessageType.REPLY,receivedId, receivedPhase, sender), this.right.getMessageBuffer());
-				}
-				if(receivedId < this.processorID) {
-					swallow(message);
-				}
+			if(receivedId == this.processorID) {
+				terminateAsLeader();
 			}
 			break;
 		
@@ -153,6 +152,7 @@ public class Processor extends Thread implements Observer{
 	}
 	
 	private void swallow(Message message) {
+		message.getSender().leader = false;
 		System.out.println("Message received from Processor "+message.getSender().getProcessorID()+ " is swallowed at Processor "+this.processorID);
 	}
 

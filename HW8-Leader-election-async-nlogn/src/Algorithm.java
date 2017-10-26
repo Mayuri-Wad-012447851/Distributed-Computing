@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class initiates Leader Election algorithm implementation
@@ -7,6 +9,7 @@
 public class Algorithm {
 	
 	Processor p0, p1, p2, p3, p4;
+	List<Processor> processors = new ArrayList<Processor>();
 
 	public static void main(String[] args) throws InterruptedException {
 		Algorithm a = new Algorithm();
@@ -43,6 +46,11 @@ public class Algorithm {
 		p4.setLeft(p0);
 		p4.setRight(p3);
 		
+		processors.add(p0);
+		processors.add(p1);
+		processors.add(p2);
+		processors.add(p3);
+		processors.add(p4);
 	}
 	
 	/**
@@ -63,6 +71,14 @@ public class Algorithm {
 		p2.join();
 		p3.join();
 		p4.join();
+		
+		System.out.println("--------------------------------------------------------------");
+		for(Processor p : processors) {
+			if(p.isLeader()) {
+				System.out.println("Processor P"+p.getProcessorID()+" has been elected as leader.");
+			}
+		}
+		System.out.println("--------------------------------------------------------------");
 		
 	}
 	
