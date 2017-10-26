@@ -133,12 +133,6 @@ public class Processor extends Thread implements Observer{
 				System.out.println("Processor P "+this.processorID+" Reply Counter == "+this.replyCounter);
 				if(this.replyCounter == 2) {
 					System.out.println("Winner in this phase " + receivedPhase + " is Processor+ " + this.processorID);
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					sendMessageToBuffer(new Message(MessageType.PROBE, receivedPhase+1, 1, this), this.left.getMessageBuffer());
 					sendMessageToBuffer(new Message(MessageType.PROBE, receivedPhase+1, 1, this), this.right.getMessageBuffer());
 					this.replyCounter = 0;
