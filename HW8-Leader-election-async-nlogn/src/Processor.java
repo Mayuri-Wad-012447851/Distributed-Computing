@@ -157,7 +157,6 @@ public class Processor extends Thread implements Observer{
 	}
 
 	private void terminateAsLeader() {
-		this.leader = true;
 		System.out.println("Processor "+this.processorID+" is terminating as leader.");
 	}
 
