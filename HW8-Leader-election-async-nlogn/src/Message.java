@@ -1,21 +1,29 @@
 
+/**
+ * This class simulates a message being shared on a communication channel Each
+ * message stores its message type and id of sender processor It also stores hop
+ * count and phase to which message belongs
+ * 
+ * @author Mayuri Wadkar, Eric Han, Sonali Mishra
+ *
+ */
 public class Message {
-	MessageType type;
-	int phase = 0;
-	int hop = 0;
-	Processor sender;
-	
-	
+	private MessageType type;
+	private int phase = 0;
+	private int hop = 0;
+	private Processor sender;
+
 	public Message(MessageType type, Processor sender) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * This constructor is for PROBE type of messages
+	 * 
 	 * @param type
-	 * @param id
 	 * @param k
 	 * @param hop
+	 * @param sender
 	 */
 	public Message(MessageType type, int k, int hop, Processor sender) {
 		this.type = type;
@@ -23,12 +31,13 @@ public class Message {
 		this.hop = hop;
 		this.sender = sender;
 	}
-	
+
 	/**
 	 * This constructor is for REPLY type of messages
+	 * 
 	 * @param type
-	 * @param id
 	 * @param phase
+	 * @param sender
 	 */
 	public Message(MessageType type, int phase, Processor sender) {
 		this.type = type;
@@ -67,7 +76,5 @@ public class Message {
 	public void setSender(Processor sender) {
 		this.sender = sender;
 	}
-	
-	
-	
+
 }

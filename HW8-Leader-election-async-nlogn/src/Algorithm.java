@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * This class initiates Leader Election algorithm implementation
+ * 
  * @author Mayuri Wadkar, Eric Han, Sonali Mishra
  *
  */
 public class Algorithm {
-	
-	Processor p0, p1, p2, p3, p4;
+
 	List<Processor> processors = new ArrayList<Processor>();
 
 	public static void main(String[] args) throws InterruptedException {
@@ -17,77 +18,79 @@ public class Algorithm {
 		a.printTopology();
 		a.execute();
 	}
-	
+
 	/**
 	 * This method creates channels and processors required for algorithm
 	 */
 	public void init() {
 		
-		Buffer p0Buffer = new Buffer();
-		Buffer p1Buffer = new Buffer();
-		Buffer p2Buffer = new Buffer();
-		Buffer p3Buffer = new Buffer();
-		Buffer p4Buffer = new Buffer();
+		System.out.println("Enter number of processors:\t");
+		Scanner sc = new Scanner(System.in);
+		int noOfProcessors = sc.nextInt();
 		
-		p0 = new Processor(10, p0Buffer);
-		p1 = new Processor(44, p1Buffer);
-		p2 = new Processor(6,  p2Buffer);
-		p3 = new Processor(50, p3Buffer);
-		p4 = new Processor(2,  p4Buffer);
+		//Initializing processor nodes with id, value and a message buffer
+		for(int i = 0 ; i < noOfProcessors; i++) {
+			System.out.println("Enter value for processor P"+i+" :\t");
+			Processor p = new Processor(i, sc.nextInt(), new Buffer());
+			processors.add(p);
+		}
 		
-		p0.setLeft(p1);
-		p0.setRight(p4);
-		p1.setLeft(p2);
-		p1.setRight(p0);
-		p2.setLeft(p3);
-		p2.setRight(p1);
-		p3.setLeft(p4);
-		p3.setRight(p2);
-		p4.setLeft(p0);
-		p4.setRight(p3);
-		
-		processors.add(p0);
-		processors.add(p1);
-		processors.add(p2);
-		processors.add(p3);
-		processors.add(p4);
+		// Assigning left and right neighbors to each processor in order to form a ring
+		// topology
+		for(int i = 0 ; i < noOfProcessors; i++) {
+			Processor p = processors.get(i);
+			
+			if(i == 0) {
+				p.setLeft(processors.get(i+1));
+				p.setRight(processors.get(noOfProcessors - 1));
+			}
+			else if(i == noOfProcessors - 1) {
+				p.setLeft(processors.get(0));
+				p.setRight(processors.get(i-1));
+			}
+			else {
+				p.setLeft(processors.get(i+1));
+				p.setRight(processors.get(i-1));
+			}
+		}
 	}
-	
+
 	/**
-	 * This method starts each processor's thread
-	 * Invokes each processor's run() method
-	 * Each processor thread joins back here and stops.
+	 * This method starts each processor's thread Invokes each processor's run()
+	 * method Each processor thread joins back here and stops.
+	 * 
 	 * @throws InterruptedException
 	 */
 	public void execute() throws InterruptedException {
 		
-		p0.start();
-		p1.start();
-		p2.start();
-		p3.start();
-		p4.start();
-		p0.join();
-		p1.join();
-		p2.join();
-		p3.join();
-		p4.join();
+		for (Processor p : processors) {
+			p.start();
+		}
 		
+		for (Processor p : processors) {
+			p.join();
+		}
+
 		System.out.println("--------------------------------------------------------------");
-		for(Processor p : processors) {
-			if(p.isLeader()) {
-				System.out.println("Processor P"+p.getProcessorID()+" has been elected as leader.");
+		// After all the phases have been completed, the only Processor whose leader
+		// value is set to true is the final leader
+		for (Processor p : processors) {
+			if (p.isLeader()) {
+				System.out.println("Processor P" + p.getProcessorID() + " has been elected as leader.");
 			}
 		}
 		System.out.println("--------------------------------------------------------------");
-		
+
 	}
-	
+
+	/**
+	 * This method displays nodes in ring with their corresponding integer values.
+	 */
 	public void printTopology() {
 		System.out.println("Ring Topology\n");
-		System.out.print("-->("+p0.getProcessorID()+")-->");
-		System.out.print("("+p1.getProcessorID()+")-->");
-		System.out.print("("+p2.getProcessorID()+")-->");
-		System.out.print("("+p3.getProcessorID()+")-->");
-		System.out.print("("+p4.getProcessorID()+")-->\n\n");
+		for(Processor p : processors) {
+			System.out.print("-->(Id: " + p.getProcessorID() + ", Value: "+p.getProcessorValue()+")-->");
+		}
+		System.out.print("\n\n");
 	}
 }
