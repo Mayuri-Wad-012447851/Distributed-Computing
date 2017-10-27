@@ -76,7 +76,7 @@ public class Algorithm {
 		// value is set to true is the final leader
 		for (Processor p : processors) {
 			if (p.isLeader()) {
-				System.out.println("Processor P" + p.getProcessorID() + " has been elected as leader.");
+				System.out.println("Processor P" + p.getProcessorID() +" with value "+p.getProcessorValue()+ " has been elected as leader.");
 			}
 		}
 		System.out.println("--------------------------------------------------------------");
